@@ -11,9 +11,10 @@
 </head>
 <body>
     <main class='container'>
-        <h1>Desafío Clase 26 - Passport</h1>
+        <h1>Desafío Clase 27 - FACEBOOK</h1>
         <div id='contenedorGeneral'>
             <h2 class='mt-4'>INICIAR SESION</h2>
+            <!--
             <form id='formIniciarSesion' action="/login" method="POST">
                 <div class='form-group'>
                     <label for='username'>Ingrese su Username</label>
@@ -23,11 +24,16 @@
                 </div>
                 <button type="submit" class='btn-warning'>Enviar</button>
             </form>
+            -->
+            <button id='facebook'>INICIAR SESION CON FACEBOOK</button>
         </div>
     </main>
 </body>
 
 <script>
-
+    const loginFacebook = document.getElementById('facebook');
+    loginFacebook.addEventListener('click', ()=> {
+        window.location = "/auth/facebook";
+    })
 </script>
 </html>
