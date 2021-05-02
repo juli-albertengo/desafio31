@@ -20,13 +20,35 @@ passport.deserializeUser(function(id, done) {
     });
 });
 
-//TODO: FacebookStrategy
+//TODO: Desafio Clase 28
+let fbClientId = '';
+let fbClientSecret = '';
+let portNumber = '';
+
+if(process.argv[2]){
+  portNumber = process.argv[2]
+} else {
+  portNumebr = process.env.PORT;
+}
+
+if(process.argv[3]){
+  fbClientId = process.argv[3]
+} else {
+  fbClientId = process.env.FACEBOOK_APP_ID;
+}
+
+if(process.argv[4]){
+  fbClientSecret = process.argv[4];
+} else {
+  fbClientSecret = process.env.FACEBOOK_APP_SECRET;
+}
+
 passport.use(
     new FacebookStrategy(
       {
-        clientID: process.env.FACEBOOK_APP_ID,
-        clientSecret: process.env.FACEBOOK_APP_SECRET,
-        callbackURL: "http://localhost:8080/auth/facebook/callback",
+        clientID: fbClientId,
+        clientSecret: fbClientSecret,
+        callbackURL: `http://localhost:${portNumber}/auth/facebook/callback`,
       },
       function (accessToken, refreshToken, profile, cb) {
         const findOrCreateUser = function () {
