@@ -2,7 +2,7 @@
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
-const {fork} = require('child_process');
+/*const {fork} = require('child_process');*/
 
 //Passport
 const passport = require('passport');
@@ -12,11 +12,14 @@ const MongoStore = require("connect-mongo");
 //My own functions & models
 const connectToDB = require('../src/repositories/index');
 const authorizationsRoutes = require('./routes/authorization.routes');
-//const calcularRandom = require('../src/services/ramdom');
 
 //Setup
 require('dotenv').config();
 const app = express();
+
+//TODO: Desafio Clase 31 - Compression
+const compression = require('compression');
+app.use(compression());
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -47,7 +50,6 @@ app.get('/', (req, res)=>{
     res.sendFile(path.join(__dirname + '/../public/index.html'));
 })
 
-//TODO: DESAFIO CLASE 28
 const portNumber = process.argv[2];
 
 process.on('exit', code => {
@@ -64,7 +66,7 @@ const info = {
   currentFolder: process.cwd()
 }
 
-
+/*
 app.get('/randoms', (req, res) => {
   let cant = req.query.cant;
   if(!cant){
@@ -75,12 +77,11 @@ app.get('/randoms', (req, res) => {
   calculo.on('message', dev => {
     res.json(dev)
   })
-})
+})*/
 
 app.get('/info', (req, res) => {
   res.json(info)
 })
-
 
 
 app.listen(portNumber || process.env.PORT, async(req, res) => {

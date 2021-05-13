@@ -1,3 +1,9 @@
+//TODO: DESAFIO CLASE 31 LOGGER
+const misLoggers = require('../loggerConfig');
+const loggerConsole = misLoggers.loggerConsole
+const loggerWarn = misLoggers.loggerWarn
+const loggerError = misLoggers.loggerError
+
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
@@ -20,7 +26,6 @@ passport.deserializeUser(function(id, done) {
     });
 });
 
-//TODO: Desafio Clase 28
 let fbClientId = '';
 let fbClientSecret = '';
 let portNumber = '';
@@ -43,6 +48,12 @@ if(process.argv[4]){
   fbClientSecret = process.env.FACEBOOK_APP_SECRET;
 }
 
+//IMPLEMENTACION LOGGERS
+loggerError.error('FUNCIONA ERROR');
+loggerWarn.warn('FUNCIONA WARN')
+loggerWarn.error('FUNCIONA WARN');
+loggerConsole.info('Well, hello there - INFO');
+
 passport.use(
     new FacebookStrategy(
       {
@@ -54,11 +65,11 @@ passport.use(
         const findOrCreateUser = function () {
           User.findOne({ facebookId: profile.id }, function (err, user) {
             if (err) {
-              console.log("Error in SignUp: " + err);
+              loggerError.error("Error in SignUp: " + err);
               return cb(err);
             }
             if (user) {
-              console.log("User already exists");
+              loggerWarn.warn("User already exists");
               return cb(null, user);
             } else {
               var newUser = new User();
@@ -66,10 +77,10 @@ passport.use(
               newUser.username = profile.displayName;
               newUser.save((err) => {
                 if (err) {
-                  console.log("Error in Saving user: " + err);
+                  loggerError.error("Error in Saving user: " + err);
                   throw err;
                 }
-                console.log("User Registration succesful");
+                loggerConsole.info("User Registration succesful");
                 return cb(null, newUser);
               });
             }
@@ -99,18 +110,18 @@ authorizationsRoutes.get('/faillogin', (req, res)=> {
 //Logout Routes
 authorizationsRoutes.get('/logout', (req, res) => {
     req.logout();
-    console.log('deslogeo oka');
+    loggerConsole.info('deslogeo oka');
     res.redirect('/');
 })
 
-//TODO: FACEBOOK ROUTES
+// FACEBOOK ROUTES
 authorizationsRoutes.get('/auth/facebook', passport.authenticate('facebook'));
 authorizationsRoutes.get(
     "/auth/facebook/callback",
     passport.authenticate("facebook", { failureRedirect: "/login" }),
     function (req, res) {
         let user = req.user.username;
-        console.log(user);
+        loggerConsole.info(user);
       // Successful authentication, redirect home.
       res.sendFile(path.join(__dirname + '/../../public/welcome.html'))
     }
